@@ -1,0 +1,38 @@
+<!-- 
+
+This component displays a list of trained example images. Pre-condition for using this component is
+that Einstein Vision has been trained with example data.
+
+ -->
+<aura:component controller="EinsteinVision_UI_Demo" implements="force:appHostable,flexipage:availableForAllPageTypes">
+
+<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+<aura:attribute name="examples" type="EinsteinVision_Example[]" />
+    <center><lightning:spinner aura:id="spinner" alternativeText="Loading Examples"/></center>
+	
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+        <thead>
+            <tr class="slds-text-title--caps">
+                <th scope="col">
+                    <div class="slds-truncate" title="Example Name">Example Name</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Example ID">Example ID</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.examples}" var="example">
+                <tr>
+                    <td scope="row" data-label="Example Name">
+                        <div class="slds-truncate" title="{!example.name}"><a href="{!example.location}" target='_new'>{!example.name}</a></div>
+                    </td>
+                    <td data-label="Example ID">
+                        <div class="slds-truncate" title="{!example.id}">{!example.id}</div>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table>
+    
+</aura:component>

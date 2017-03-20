@@ -1,0 +1,33 @@
+public class EinsteinVision_Model {
+
+    @AuraEnabled
+    public Long datasetId {get; set;}
+    @AuraEnabled
+    public String name {get; set;}
+    @AuraEnabled
+    public String status {get; set;}
+    @AuraEnabled
+    public Integer progress {get; set;}
+    @AuraEnabled
+    public DateTime createdAt {get; set;}
+    @AuraEnabled
+    public DateTime updatedAt {get; set;}
+    @AuraEnabled
+    public Double learningRate {get; set;}
+    @AuraEnabled
+    public Integer epochs {get; set;}
+    @AuraEnabled
+    public Integer queuePosition {get; set;}
+    @AuraEnabled
+    public String modelId {get; set;}
+    @AuraEnabled
+    public String failureMsg {get; set;}
+    @AuraEnabled
+    public Integer datasetVersionId {get; set;}
+    @AuraEnabled
+    public String modelType {get; set;}
+    @AuraEnabled
+    public String trainParams {get; set;}
+    @AuraEnabled
+    public String trainStats {get; set;}
+}

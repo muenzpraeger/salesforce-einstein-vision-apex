@@ -1,0 +1,122 @@
+public class EinsteinVision_HttpBodyPartTraining extends EinsteinVision_HttpBodyPart {
+    
+    private Long datasetId;
+    private String name;
+    private Integer epochs;
+    private Double learningRate;
+    private String trainParams;
+    
+    private boolean hasEpochs = false;
+    
+    private static double DEFAULT_LEARNING_RATE = 0.0001;
+    private static double MIN_LEARNING_RATE = 0.0001;
+    private static double MAX_LEARNING_RAGE = 0.01;
+    
+    public EinsteinVision_HttpBodyPartTraining(Long datasetId, String name, Integer epochs, Double learningRate, String trainParams) {
+        if (datasetId == 0) {
+            throw new EinsteinVision_NoValuesException('datasetId');
+        }
+        if (name==null || name.equals('')) {
+            throw new EinsteinVision_StringIsEmptyException('name');
+        }
+        if (name.length()>180) {
+            throw new EinsteinVision_StringTooLongException('name', 180, name.length());
+        }
+        if (epochs==0) {
+            hasEpochs = false;
+        } else if (epochs>100) {
+            throw new EinsteinVision_NumberToBigException('epochs', 100, epochs);
+        }
+        if (learningRate==0) {
+            learningRate = DEFAULT_LEARNING_RATE;
+        } else {
+            if (learningRate < MIN_LEARNING_RATE) {
+                throw new EinsteinVision_NumberToSmallException('learningRate', MIN_LEARNING_RATE, learningRate);
+            } else if (learningRate > MAX_LEARNING_RAGE) {
+                throw new EinsteinVision_NumberToBigException('learningRate', MAX_LEARNING_RAGE, learningRate);
+            }
+        }
+        this.datasetId = datasetId;
+        this.name = name;
+        this.epochs = epochs;
+        this.learningRate = learningRate;
+        this.trainParams = trainParams;
+    }
+    
+    public Blob build() {
+        String body = '';
+        body += WriteBoundary();
+        body += WriteBodyParameter('name', name);
+        body += WriteBoundary();
+        body += WriteBodyParameter('datasetId', String.valueOf(datasetId));
+        if (hasEpochs) {
+            body += WriteBoundary();
+            body += WriteBodyParameter('epochs', String.valueOf(epochs));
+        }
+        body += WriteBoundary();
+        body += WriteBodyParameter('learningRate', String.valueOf(learningRate));
+        body += WriteBoundary();
+        if (trainParams!=null) {
+            body += WriteBodyParameter('trainParams', trainParams);
+        }
+        body += WriteBoundary(EndingType.CrLf);
+        Blob bodyBlob = EncodingUtil.base64Decode(body);
+        return bodyBlob;
+    }
+
+    public Long getDatasetId() {
+        return datasetId;
+    }
+
+    public void setDatasetId(Long datasetId) {
+        if (datasetId == 0) {
+            throw new EinsteinVision_NoValuesException('datasetId');
+        }
+        this.datasetId = datasetId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name==null || name.equals('')) {
+            throw new EinsteinVision_StringIsEmptyException('name');
+        }
+        if (name.length()>180) {
+            throw new EinsteinVision_StringTooLongException('name', 180, name.length());
+        }
+        this.name = name;
+    }
+
+    public Integer getEpochs() {
+        return epochs;
+    }
+
+    public void setEpochs(Integer epochs) {
+        if (epochs==0) {
+            hasEpochs = false;
+        } else if (epochs>100) {
+            throw new EinsteinVision_NumberToBigException('epochs', 100, epochs);
+        }
+        this.epochs = epochs;
+    }
+
+    public double getLearningRate() {
+        return learningRate;
+    }
+
+    public void setLearningRate(double learningRate) {
+        if (learningRate==0) {
+            learningRate = DEFAULT_LEARNING_RATE;
+        } else {
+            if (learningRate < MIN_LEARNING_RATE) {
+                throw new EinsteinVision_NumberToSmallException('learningRate', MIN_LEARNING_RATE, learningRate);
+            } else if (learningRate > MAX_LEARNING_RAGE) {
+                throw new EinsteinVision_NumberToBigException('learningRate', MAX_LEARNING_RAGE, learningRate);
+            }
+        }
+        this.learningRate = learningRate;
+    }
+
+}

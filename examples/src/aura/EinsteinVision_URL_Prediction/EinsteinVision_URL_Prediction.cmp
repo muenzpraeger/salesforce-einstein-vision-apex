@@ -1,0 +1,20 @@
+<!-- 
+
+This component predicts a given URL against the General Image Classifier (https://metamind.readme.io/v1/page/general-image-model-class-list).
+
+ -->
+<aura:component controller="EinsteinVision_UI_Demo" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="predictionsUrl" type="EinsteinVision_PredictionResult[]" />
+    
+    <br />
+        
+    <lightning:input aura:id="fldUrl" name="fldUrl" type="text" label="Remote URL for prediction" />
+    <lightning:button aura:id="btnUrl" name="btnUrl" label="Predict URL" onclick="{!c.predictUrl}" />
+    
+    <br />
+    <aura:iteration items="{!v.predictionsUrl}" var="prediction">
+        {!prediction.label} - ({!prediction.probability})<br />
+    </aura:iteration>
+    
+</aura:component>
