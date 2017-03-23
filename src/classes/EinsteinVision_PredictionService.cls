@@ -63,6 +63,9 @@ public class EinsteinVision_PredictionService {
      * @
      */
     public EinsteinVision_Dataset getDataset(Long id) {
+        if (id==0) {
+            throw new EinsteinVision_NoValuesException('datasetId');
+        }
         System.debug('Starting getDataset call with parameter ' + id);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/' + id);
         System.debug('Target URL is ' + client.getUrl());
@@ -136,8 +139,8 @@ public class EinsteinVision_PredictionService {
         if (client.isError()) {
             handleError(client.getResponseError());
         } else {
-            System.debug('Dataset ' + id + ' has been deleted.');
-            return true;
+                System.debug('Dataset ' + id + ' has been deleted.');
+                return true;
         }
         return false;
     }
@@ -199,20 +202,23 @@ public class EinsteinVision_PredictionService {
         return null;
     }
 
-    /**
-     * Adds a new image example for the predictive vision training.
+     /**
+     * Adds new image examples for the predictive vision training.
      * @param datasetId
      * The id of the EinsteinVision_Dataset to which the image should be added.
-     * @param url
-     * The remote URL of the to be trained image.
+     * @param name
+     * The name of the example.
+     * @param fileBlob
+     * The blog of the to be trained image.
      * @return
      * @
      */
-    public EinsteinVision_Example createExampleFromUrl(Long datasetId, String url) {
-        System.debug('Starting createExampleFromUrl call from URL ' + url);
-        EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
+    public EinsteinVision_Example createExample(Long datasetId, String name, Long labelId, Blob fileBlob) {
+        System.debug('Starting createExample call from blob');
+        EinsteinVision_HttpBodyPartExample parts = new EinsteinVision_HttpBodyPartExample(name, labelId, EncodingUtil.base64Encode(fileBlob));
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/' + datasetId + EXAMPLES, parts.build());
         System.debug('Target URL is ' + client.getUrl());
+        client.isPost(true);
         client.execute();
         while(isExecuting()) {
             System.debug('Status is: ' + isExecuting());
@@ -222,8 +228,38 @@ public class EinsteinVision_PredictionService {
             handleError(client.getResponseError());
         } else {
             EinsteinVision_Example example = (EinsteinVision_Example)client.getParser().readValueAs(EinsteinVision_Example.class);
-            System.debug('New Example with id ' + example.id + ' has been created.');
+            System.debug('New example with id ' + example.id + ' has been created.');
             return example;
+        }
+        return null;
+    }
+
+    /**
+     * Adds new image examples for the predictive vision training.
+     * @param datasetId
+     * The id of the EinsteinVision_Dataset to which the image should be added.
+     * @param url
+     * The remote URL of the to be trained image.
+     * @return
+     * @
+     */
+    public EinsteinVision_Dataset createExamplesFromUrl(Long datasetId, String url) {
+        System.debug('Starting createExampleFromUrl call from URL ' + url);
+        EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
+        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/' + datasetId + '/upload', parts.build());
+        client.isPut(true);
+        System.debug('Target URL is ' + client.getUrl());
+        client.execute();
+        while(isExecuting()) {
+            System.debug('Status is: ' + isExecuting());
+        }
+        System.debug('Call createExampleFromUrl has been executed.');
+        if (client.isError()) {
+            handleError(client.getResponseError());
+        } else {
+            EinsteinVision_Dataset dataset = (EinsteinVision_Dataset)client.getParser().readValueAs(EinsteinVision_Dataset.class);
+            System.debug('New dataset with id ' + dataset.id + ' has been created.');
+            return dataset;
         }
         return null;
     }
@@ -326,8 +362,8 @@ public class EinsteinVision_PredictionService {
         if (client.isError()) {
             handleError(client.getResponseError());
         } else {
-            System.debug('Example '  + id + ' has been deleted.');
-            return true;
+                System.debug('Example ' + id + ' has been deleted.');
+                return true;
         }
         return false;
     }
@@ -345,7 +381,7 @@ public class EinsteinVision_PredictionService {
      * @return
      * @
      */
-    public EinsteinVision_Model trainDataset(EinsteinVision_Dataset dataset, String name, Integer epochs, Double learningRate, String trainParams) {
+    public EinsteinVision_Model trainDataset(EinsteinVision_Dataset dataset, String name, Integer epochs, Decimal learningRate, String trainParams) {
         return trainDataset(dataset.id, name, epochs, learningRate, trainParams);
     }
 
@@ -360,7 +396,7 @@ public class EinsteinVision_PredictionService {
      * @param learningRate
      * Optional. The learning rate, valid values are betweed 0.0001 and 0.01. Set to 0 if you want to use the default.
      */
-    public EinsteinVision_Model trainDataset(Long datasetId, String name, Integer epochs, double learningRate, String trainParams) {
+    public EinsteinVision_Model trainDataset(Long datasetId, String name, Integer epochs, Decimal learningRate, String trainParams) {
         EinsteinVision_Dataset dataset = getDataset(datasetId);
         if (dataset != null) {
             if (dataset.totalExamples>0) {
@@ -409,6 +445,32 @@ public class EinsteinVision_PredictionService {
             EinsteinVision_Model model = (EinsteinVision_Model)client.getParser().readValueAs(EinsteinVision_Model.class);
             System.debug('Model status has been read.');
             return model;
+        }
+        return null;
+    }
+
+   /**
+     * Gets the learning curve of a model.
+     * @param modelMetricsId
+     * The model id for which the learning curve should be fetched.
+     * @return
+     * @
+     */
+    public EinsteinVision_ModelLearningCurve[] getModelLearningCurve(String modelMetricsId) {
+        System.debug('Starting getModelLearningCurve call with parameter ' + modelMetricsId);
+        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, BASE_URL + MODELS + '/' + modelMetricsId + '/lc');
+        System.debug('Target URL is ' + client.getUrl());
+        client.execute();
+        while(isExecuting()) {
+            System.debug('Status is: ' + isExecuting() );
+        }
+        System.debug('Call getModelLearningCurve has been executed.');
+        if (client.isError()) {
+            handleError(client.getResponseError());
+        } else {
+            EinsteinVision_ModelLearningCurve[] modelLearningCurve = (EinsteinVision_ModelLearningCurve[])client.getParser().readValueAs(EinsteinVision_ModelLearningCurve[].class);
+            System.debug('ModelLearningCurve has been read.');
+            return modelLearningCurve;
         }
         return null;
     }
@@ -550,7 +612,7 @@ public class EinsteinVision_PredictionService {
      */
     public EinsteinVision_PredictionResult predictBlob(String modelId, Blob fileBlob, String sampleId) {
         System.debug('Starting predict call with model ' + modelId + ' for blob');
-        EinsteinVision_HttpBodyPartPrediction parts = new EinsteinVision_HttpBodyPartPrediction(modelId, EncodingUtil.base64Encode(fileBlob), sampleId, EinsteinVision_HttpBodyPartPrediction.Types.FILEBLOB);
+        EinsteinVision_HttpBodyPartPrediction parts = new EinsteinVision_HttpBodyPartPrediction(modelId, EncodingUtil.base64Encode(fileBlob), sampleId, EinsteinVision_HttpBodyPartPrediction.Types.BASE64);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, PREDICT, parts.build());
         System.debug('Target URL is ' + client.getUrl());
         client.execute();

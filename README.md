@@ -14,6 +14,12 @@ For running the app on your own you'll need to fulfill the following requirement
 
 Please find the detailed instructions for how to setup access to the [Einstein Vision API here](https://metamind.readme.io/docs/what-you-need-to-call-api).
 
+## Unmanaged Package
+
+It is recommended to upload the source code to the org of your choice i. e. with the Force.com IDE.
+
+You can also install the current version as an [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0Y000000qN6S).
+
 # Getting started
 
 As this library is basically a wrapper for using the [Salesforce Einstein Vision API](https://metamind.readme.io/) it is highly recommended to checkout the API documentation.

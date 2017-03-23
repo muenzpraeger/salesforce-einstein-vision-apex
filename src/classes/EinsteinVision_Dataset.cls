@@ -13,6 +13,8 @@ public class EinsteinVision_Dataset {
     @AuraEnabled
     public Long totalExamples {get; set;}
     @AuraEnabled
+    public Long totalLabels {get; set;}
+    @AuraEnabled
     public Boolean available {get; set;}
     @AuraEnabled
     public String statusMsg {get; set;}
