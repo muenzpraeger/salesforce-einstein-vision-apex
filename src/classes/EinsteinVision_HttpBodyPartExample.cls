@@ -4,7 +4,7 @@ public class EinsteinVision_HttpBodyPartExample extends EinsteinVision_HttpBodyP
     private String data;
     private String name;
     
-    public EinsteinVision_HttpBodyPartExample(String name,long labelId, String data) {
+    public EinsteinVision_HttpBodyPartExample(String name, long labelId, String data) {
         if (name==null || name.equals('')) {
             throw new EinsteinVision_StringIsEmptyException('name');
         }

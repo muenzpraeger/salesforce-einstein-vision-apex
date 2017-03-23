@@ -10,5 +10,7 @@ public class EinsteinVision_ModelMetrics {
     public List<List<Integer>> confusionMatrix {get; set;}
     @AuraEnabled
     public Double trainingAccuracy {get; set;}
+    @AuraEnabled
+    public List<String> labels {get; set;}
 
 }

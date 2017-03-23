@@ -23,7 +23,7 @@ public class EinsteinVision_HttpClient {
         this.predictionService = predictionService;
         this.url = url;
         this.body = body;
-        isPost = true;
+        isPost(true);
     }
 
     public boolean isDelete() {
@@ -59,12 +59,12 @@ public class EinsteinVision_HttpClient {
             
             request.setMethod('GET');
 
-            if (isDelete) {
+            if (isDelete()) {
                 request.setMethod('DELETE');
-            } else if (isPost || isPut) {
+            } else if (isPost() || isPut()) {
                 request.setHeader('Content-Type', EinsteinVision_HttpBodyPart.GetContentType());
                 request.setBodyAsblob(body);
-                if (isPut) {
+                if (isPut()) {
                     request.setMethod('PUT');
                 } else {
                     request.setMethod('POST');
@@ -83,7 +83,7 @@ public class EinsteinVision_HttpClient {
     }
 
     public Boolean isError() {
-        return getStatusCode()!=200;
+        return (getStatusCode()!=200 && getStatusCode()!=204);
     }
 
     public Integer getStatusCode() {
