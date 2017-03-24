@@ -1,6 +1,6 @@
 @isTest
 public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpCalloutMock {
-
+    
     public HTTPResponse respond(HTTPRequest req) {
         
         String httpEndpoint = req.getEndpoint();
@@ -62,6 +62,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         res.setBody(jsonResponse);
         res.setStatusCode(200);
         return res;
+        
     }
     
     private static HTTPResponse mockGetDataset(HTTPRequest req) {
@@ -119,7 +120,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         return res;
         
     }
-
+    
     private static HTTPResponse mockCreateExample(HTTPRequest req) {
         
         String jsonResponse = '{"id":43887,"name":"77880132.jpg","location":"https://jBke4mtMuOjrCK3A04Q79O5TBySI2BC3zqi7...","createdAt":"2016-09-15T23:18:13.000+0000","label":{"id":614,"datasetId":57,"name":"beach","numExamples":50},"object":"example"}'; 
@@ -158,7 +159,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         
     }
     
-  private static HTTPResponse mockGetExamples(HTTPRequest req) {
+    private static HTTPResponse mockGetExamples(HTTPRequest req) {
         
         String jsonResponse = '{"object":"list","data":[{"id":43888,"name":"659803277.jpg","location":"https://K3A04Q79O5TBySIZSeMIj%2BC3zqi7rOmeK...","createdAt":"2016-09-16T17:14:38.000+0000","label":{"id":618,"datasetId":57,"name":"beach","numExamples":50},"object":"example"},{"id":43889,"name":"661860605.jpg","location":"https://jBke4mtMuOjrCK3A04Q79O5TBySI2BC3zqi7...","createdAt":"2016-09-16T17:14:42.000+0000","label":{"id":618,"datasetId":57,"name":"beach","numExamples":50},"object":"example"},{"id":43890,"name":"660548647.jpg","location":"https://HKzY79n47nd%2F0%2FCem6PJBkUoyxMWVssCX...","createdAt":"2016-09-16T17:15:25.000+0000","label":{"id":619,"datasetId":57,"name":"mountain","numExamples":49},"object":"example"},{"id":43891,"name":"578339672.jpg","location":"https://LRlXQeRyTVDiujSzHTabcJ2FGGnuGhAvedvu0D...","createdAt":"2016-09-16T17:15:29.000+0000","label":{"id":619,"datasetId":57,"name":"mountain","numExamples":49},"object":"example"}]}'; 
         
@@ -178,7 +179,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         
     }
     
-      private static HTTPResponse mockTrainDataset(HTTPRequest req) {
+    private static HTTPResponse mockTrainDataset(HTTPRequest req) {
         
         String jsonResponse = '{"datasetId":57,"datasetVersionId":0,"name":"Beach and Mountain Model","status":"QUEUED","progress":0,"createdAt":"2016-09-16T18:03:21.000+0000","updatedAt":"2016-09-16T18:03:21.000+0000","learningRate":0.001,"epochs":3,"queuePosition":1,"object":"training","modelId":"7JXCXTRXTMNLJCEF2DR5CJ46QU","trainParams":null,"trainStats":null,"modelType":"image"}'; 
         
@@ -192,7 +193,6 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
     
     private static HTTPResponse mockGetModel(HTTPRequest req) {
         
-        //String jsonResponse = '{"datasetId":57,"datasetVersionId":0,"name":"Beach and Mountain Model","status":"SUCCEEDED","progress":1,"createdAt":"2016-09-16T18:03:21.000+0000","updatedAt":"2016-09-16T18:03:21.000+0000","learningRate":0.001,"epochs":3,"object":"training","modelId":"7JXCXTRXTMNLJCEF2DR5CJ46QU","trainParams":{"trainSplitRatio":0.7},"trainStats":null,"modelType":"image"}'; 
         String jsonResponse = '{"datasetId":57,"datasetVersionId":0,"name":"Beach and Mountain Model","status":"SUCCEEDED","progress":1,"createdAt":"2016-09-16T18:03:21.000+0000","updatedAt":"2016-09-16T18:03:21.000+0000","learningRate":0.001,"epochs":3,"object":"training","modelId":"7JXCXTRXTMNLJCEF2DR5CJ46QU","trainParams":null,"trainStats":null,"modelType":"image"}';
         
         HttpResponse res = new HttpResponse();
@@ -239,7 +239,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         
     }
     
-   private static HTTPResponse mockPredictBase64(HTTPRequest req) {
+    private static HTTPResponse mockPredictBase64(HTTPRequest req) {
         
         String jsonResponse = '{"probabilities":[{"label":"beach","probability":0.96021104},{"label":"mountain","probability":0.039788953959941864}],"object":"predictresponse"}'; 
         
@@ -251,7 +251,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         
     }
     
-   private static HTTPResponse mockPredictBlob(HTTPRequest req) {
+    private static HTTPResponse mockPredictBlob(HTTPRequest req) {
         
         String jsonResponse = '{"probabilities":[{"label":"beach","probability":0.98093873},{"label":"mountain","probability":0.019061258}],"object":"predictresponse"}'; 
         
@@ -263,7 +263,7 @@ public with sharing class Test_EinsteinVision_HttpMockResponses implements HttpC
         
     }
     
-   private static HTTPResponse mockPredictUrl(HTTPRequest req) {
+    private static HTTPResponse mockPredictUrl(HTTPRequest req) {
         
         String jsonResponse = '{"probabilities":[{"label":"beach","probability":0.9997346},{"label":"mountain","probability":2.6542565E-4}],"object":"predictresponse"}'; 
         
