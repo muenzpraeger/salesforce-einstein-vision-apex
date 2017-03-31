@@ -29,8 +29,10 @@ public class EinsteinVision_HttpBodyPartExample extends EinsteinVision_HttpBodyP
         body += WriteBoundary();
         body += WriteBodyParameter('labelId', String.valueOf(labelId));
         body += WriteBoundary();
-        body += WriteBodyParameter('data', data);
-        body += WriteBoundary(EndingType.CrLf);
+        
+        body += WriteBlobBodyParameter('data', data, name, 'image/png');
+        // Will write it's own boundary based on last characters of base64 encoded blob
+        
         Blob bodyBlob = EncodingUtil.base64Decode(body);
         return bodyBlob;
     }
