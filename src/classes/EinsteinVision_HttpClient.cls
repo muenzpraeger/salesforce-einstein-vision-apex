@@ -128,6 +128,8 @@ public class EinsteinVision_HttpClient {
                     if (parser.getCurrentToken()==JSONToken.FIELD_NAME) {
                         String currentProperty = parser.getText();
                         if (currentProperty=='message') {
+                            // The next token will be the actual error message.
+                            parser.nextToken();
                             errorMessage = parser.getText();
                             break;
                         }
