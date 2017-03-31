@@ -18,6 +18,11 @@ Please find the detailed instructions for how to setup access to the [Einstein V
 
 It is recommended to upload the source code to the org of your choice i. e. with the Force.com IDE.
 
+<a href="https://githubsfdeploy.herokuapp.com?owner=muenzpraeger&repo=salesforce-einstein-vision-apex">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
+</a>
+
 You can also install the current version as an [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0Y000000qN6S).
 
 # Getting started
