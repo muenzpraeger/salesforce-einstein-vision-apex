@@ -29,7 +29,7 @@ public class EinsteinVision_HttpBodyPartExample extends EinsteinVision_HttpBodyP
         body += WriteBoundary();
         body += WriteBodyParameter('labelId', String.valueOf(labelId));
         body += WriteBoundary();
-        body += WriteBodyParameter('data', data);
+        body += WriteBlobBodyParameter('data', data, name);
         body += WriteBoundary(EndingType.CrLf);
         Blob bodyBlob = EncodingUtil.base64Decode(body);
         return bodyBlob;
