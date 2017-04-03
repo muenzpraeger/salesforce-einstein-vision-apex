@@ -697,7 +697,7 @@ public class EinsteinVision_PredictionService {
      * @param message
      */
     private void handleError(String message) {
-        System.debug('Response finished with Error: ' + message);
+        System.debug(LoggingLevel.Error, 'Response finished with Error: ' + message);
     }
 
     /**
