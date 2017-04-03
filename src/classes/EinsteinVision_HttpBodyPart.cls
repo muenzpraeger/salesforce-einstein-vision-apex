@@ -101,11 +101,14 @@ public virtual class EinsteinVision_HttpBodyPart {
         return content;
     }
     
-    /**
+  /**
      *  Write a key-value pair to the form's body for a blob.
      */
-    public static string WriteBlobBodyParameter(string key, string file64, string filename, string mimeType) {
-        string contentDisposition = 'Content-Disposition: form-data; name="' + key + '"; filename="'+filename+'"';
+    public static string WriteBlobBodyParameter(string key, string file64, string fileName) {
+        
+        String mimeType = resolveMimeType(fileName);
+        
+        string contentDisposition = 'Content-Disposition: form-data; name="' + key + '"; filename="'+fileName+'"';
         string contentDispositionCrLf = contentDisposition + '\r\n';
         blob contentDispositionCrLfBlob = blob.valueOf(contentDispositionCrLf);
         string contentDispositionCrLf64 = EncodingUtil.base64Encode(contentDispositionCrLfBlob);
@@ -159,6 +162,21 @@ public virtual class EinsteinVision_HttpBodyPart {
         
         content += WriteBoundary(ending);
         return content;
+    }
+    
+    private static String resolveMimeType(String fileName) {
+        String fileType = fileName.substringAfterLast('.');
+        String mimeType = 'image/png'; // fallback value
+        if (fileType.equalsIgnoreCase('png')) {
+            mimeType = 'image/png';
+        } else if (fileType.equalsIgnoreCase('jpeg') || fileType.equalsIgnoreCase('jpg')) {
+            mimeType = 'image/jpg';
+        } else if (fileType.equalsIgnoreCase('pgm')) {
+            mimeType = 'image/x-portable-graymap';
+        } else if (fileType.equalsIgnoreCase('ppm')) {
+            mimeType = 'image/x-portable-pixmap';            
+        }
+        return mimeType;
     }
 
     /**
