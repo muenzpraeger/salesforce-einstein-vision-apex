@@ -100,6 +100,66 @@ public virtual class EinsteinVision_HttpBodyPart {
 
         return content;
     }
+    
+    /**
+     *  Write a key-value pair to the form's body for a blob.
+     */
+    public static string WriteBlobBodyParameter(string key, string file64, string filename, string mimeType) {
+        string contentDisposition = 'Content-Disposition: form-data; name="' + key + '"; filename="'+filename+'"';
+        string contentDispositionCrLf = contentDisposition + '\r\n';
+        blob contentDispositionCrLfBlob = blob.valueOf(contentDispositionCrLf);
+        string contentDispositionCrLf64 = EncodingUtil.base64Encode(contentDispositionCrLfBlob);
+        string content = SafelyPad(contentDisposition, contentDispositionCrLf64, '\r\n');
+        
+        string contentTypeHeader = 'Content-Type: ' + mimeType;
+        string contentTypeCrLf = contentTypeHeader + '\r\n\r\n';
+        blob contentTypeCrLfBlob = blob.valueOf(contentTypeCrLf);
+        string contentTypeCrLf64 = EncodingUtil.base64Encode(contentTypeCrLfBlob);
+        content += SafelyPad(contentTypeHeader, contentTypeCrLf64, '\r\n\r\n');
+        
+        integer file64Length = file64.length();
+        String last4Bytes = file64.substring(file64.length()-4,file64.length());
+
+        // Avoid padding the file data with spaces, which SafelyPad does
+        // http://salesforce.stackexchange.com/a/33326/102
+        EndingType ending = EndingType.None;
+        if (last4Bytes.endsWith('==')) {
+            // The '==' sequence indicates that the last group contained only one 8 bit byte
+            // 8 digit binary representation of CR is 00001101
+            // 8 digit binary representation of LF is 00001010
+            // Stitch them together and then from the right split them into 6 bit chunks
+            // 0000110100001010 becomes 0000 110100 001010
+            // Note the first 4 bits 0000 are identical to the padding used to encode the
+            // second original 6 bit chunk, this is handy it means we can hard code the response in
+            // The decimal values of 110100 001010 are 52 10
+            // The base64 mapping values of 52 10 are 0 K
+            // See http://en.wikipedia.org/wiki/Base64 for base64 mapping table
+            // Therefore, we replace == with 0K
+            // Note: if using \n\n instead of \r\n replace == with 'oK'
+            last4Bytes = last4Bytes.substring(0,2) + '0K';
+            file64 = file64.substring(0,file64.length()-4) + last4Bytes;
+            // We have appended the \r\n to the Blob, so leave footer as it is.
+            ending = EndingType.CrLf;
+        } else if (last4Bytes.endsWith('=')) {
+            // '=' indicates that encoded data already contained two out of 3x 8 bit bytes
+            // We replace final 8 bit byte with a CR e.g. \r
+            // 8 digit binary representation of CR is 00001101
+            // Ignore the first 2 bits of 00 001101 they have already been used up as padding
+            // for the existing data.
+            // The Decimal value of 001101 is 13
+            // The base64 value of 13 is N
+            // Therefore, we replace = with N
+            last4Bytes = last4Bytes.substring(0,3) + 'N';
+        	file64 = file64.substring(0,file64.length()-4) + last4Bytes;
+            // We have appended the CR e.g. \r, still need to prepend the line feed to the footer
+            ending = EndingType.Cr;
+        }
+               
+        content += file64;
+        
+        content += WriteBoundary(ending);
+        return content;
+    }
 
     /**
      *  Helper enum indicating how a file's base64 padding was replaced.
