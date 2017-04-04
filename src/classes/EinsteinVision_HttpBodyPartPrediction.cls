@@ -37,7 +37,7 @@ public class EinsteinVision_HttpBodyPartPrediction extends EinsteinVision_HttpBo
         }
         body += WriteBoundary();
         if (type==Types.BASE64) {
-            body += WriteBlobBodyParameter('sampleBase64Content', data, fileName);
+            body += WriteBodyParameter('sampleBase64Content', data);
         } else if (type==Types.URL) {
             body += WriteBodyParameter('sampleLocation', data);
         }
