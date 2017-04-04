@@ -544,15 +544,13 @@ public class EinsteinVision_PredictionService {
      * The EinsteinVision_Model that should be used for the prediction.
      * @param base64
      * The image that should be predicted.
-     * @param fileName
-     * The image file name for MIME detection.
      * @param sampleId
      * Optional. A string that gets returned as an association with the predicted image.
      * @return
      * @
      */
-    public EinsteinVision_PredictionResult predictBase64(EinsteinVision_Model model, String base64, String fileName, String sampleId) {
-        return predictBase64(model.modelId, base64, fileName, sampleId);
+    public EinsteinVision_PredictionResult predictBase64(EinsteinVision_Model model, String base64, String sampleId) {
+        return predictBase64(model.modelId, base64, sampleId);
     }
 
     /**
@@ -561,16 +559,14 @@ public class EinsteinVision_PredictionService {
      * The EinsteinVision_Model id that should be used for the prediction.
      * @param base64
      * The image that should be predicted.
-     * @param fileName
-     * The image file name for MIME detection.
      * @param sampleId
      * Optional. A string that gets returned as an association with the predicted image.
      * @return
      * @
      */
-    public EinsteinVision_PredictionResult predictBase64(String modelId, String base64, String fileName, String sampleId) {
+    public EinsteinVision_PredictionResult predictBase64(String modelId, String base64, String sampleId) {
         System.debug('Starting predict call with model ' + modelId + ' for base64');
-        EinsteinVision_HttpBodyPartPrediction parts = new EinsteinVision_HttpBodyPartPrediction(modelId, base64, fileName, sampleId, EinsteinVision_HttpBodyPartPrediction.Types.BASE64);
+        EinsteinVision_HttpBodyPartPrediction parts = new EinsteinVision_HttpBodyPartPrediction(modelId, base64, sampleId, EinsteinVision_HttpBodyPartPrediction.Types.BASE64);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, PREDICT, parts.build());
         System.debug('Target URL is ' + client.getUrl());
         client.execute();
@@ -594,15 +590,13 @@ public class EinsteinVision_PredictionService {
      * The EinsteinVision_Model that should be used for the prediction.
      * @param fileBlob
      * The image blob for the prediction.
-     * @param fileName
-     * The image file name for MIME detection.
      * @param sampleId
      * Optional. A string that gets returned as an association with the predicted image.
      * @return
      * @
      */
-    public EinsteinVision_PredictionResult predictBlob(EinsteinVision_Model model, Blob fileBlob, String fileName, String sampleId) {
-        return predictBlob(model.modelId, fileBlob, fileName, sampleId);
+    public EinsteinVision_PredictionResult predictBlob(EinsteinVision_Model model, Blob fileBlob, String sampleId) {
+        return predictBlob(model.modelId, fileBlob, sampleId);
     }
 
     /**
@@ -611,16 +605,14 @@ public class EinsteinVision_PredictionService {
      * The Model id that should be used for the prediction.
      * @param fileBlob
      * The image blob for the prediction.
-     * @param fileName
-     * The image file name for MIME detection.
      * @param sampleId
      * Optional. A string that gets returned as an association with the predicted image.
      * @return
      * @
      */
-    public EinsteinVision_PredictionResult predictBlob(String modelId, Blob fileBlob, String fileName, String sampleId) {
+    public EinsteinVision_PredictionResult predictBlob(String modelId, Blob fileBlob String sampleId) {
         System.debug('Starting predict call with model ' + modelId + ' for blob');
-        EinsteinVision_HttpBodyPartPrediction parts = new EinsteinVision_HttpBodyPartPrediction(modelId, EncodingUtil.base64Encode(fileBlob), fileName, sampleId, EinsteinVision_HttpBodyPartPrediction.Types.BASE64);
+        EinsteinVision_HttpBodyPartPrediction parts = new EinsteinVision_HttpBodyPartPrediction(modelId, EncodingUtil.base64Encode(fileBlob), sampleId, EinsteinVision_HttpBodyPartPrediction.Types.BASE64);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, PREDICT, parts.build());
         System.debug('Target URL is ' + client.getUrl());
         client.execute();

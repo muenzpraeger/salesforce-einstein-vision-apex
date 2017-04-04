@@ -425,7 +425,7 @@ public with sharing class Test_EinsteinVision {
         
         Test.setMock(HttpCalloutMock.class, new Test_EinsteinVision_HttpMockResponses());
         
-        EinsteinVision_PredictionResult result = service.predictBase64('YCQ4ZACEPJFGXZNRA6ERF3GL5E', 'aaabbbccc', '77880132.jpg', '');
+        EinsteinVision_PredictionResult result = service.predictBase64('YCQ4ZACEPJFGXZNRA6ERF3GL5E', 'aaabbbccc', '');
         
         System.assertEquals(2, result.probabilities.size());
         System.assertEquals('beach', result.probabilities.get(0).label);
@@ -434,7 +434,7 @@ public with sharing class Test_EinsteinVision {
         EinsteinVision_Model model = new EinsteinVision_Model();
         model.modelId = 'YCQ4ZACEPJFGXZNRA6ERF3GL5E'; 
         
-        result = service.predictBase64(model, 'aaabbbccc', '77880132.jpg', '');
+        result = service.predictBase64(model, 'aaabbbccc', '');
         System.assertEquals(2, result.probabilities.size());
         
     }
