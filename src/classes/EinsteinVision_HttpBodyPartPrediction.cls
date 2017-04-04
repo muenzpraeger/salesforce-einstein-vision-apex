@@ -9,11 +9,20 @@ public class EinsteinVision_HttpBodyPartPrediction extends EinsteinVision_HttpBo
     private String modelId;
     private String data;
     private String sampleId;
+    private String fileName;
     private Types type;
     
     public EinsteinVision_HttpBodyPartPrediction(String modelId, String data, String sampleId, Types type) {
         this.modelId = modelId;
         this.data = data;
+        this.sampleId = sampleId;
+        this.type = type;
+    }
+    
+    public EinsteinVision_HttpBodyPartPrediction(String modelId, String data, String fileName, String sampleId, Types type) {
+        this.modelId = modelId;
+        this.data = data;
+        this.fileName = fileName;
         this.sampleId = sampleId;
         this.type = type;
     }
@@ -28,7 +37,7 @@ public class EinsteinVision_HttpBodyPartPrediction extends EinsteinVision_HttpBo
         }
         body += WriteBoundary();
         if (type==Types.BASE64) {
-            body += WriteBodyParameter('sampleBase64Content', data, fileName);
+            body += WriteBlobBodyParameter('sampleBase64Content', data, fileName);
         } else if (type==Types.URL) {
             body += WriteBodyParameter('sampleLocation', data);
         }
@@ -51,6 +60,14 @@ public class EinsteinVision_HttpBodyPartPrediction extends EinsteinVision_HttpBo
 
     public void setData(String data) {
         this.data = data;
+    }
+    
+    public String getFileName() {
+        return fileName;
+    }
+    
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getSampleId() {

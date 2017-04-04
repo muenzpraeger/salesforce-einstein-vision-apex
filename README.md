@@ -18,7 +18,7 @@ Please find the detailed instructions for how to setup access to the [Einstein V
 
 It is recommended to upload the source code to the org of your choice i. e. with the Force.com IDE.
 
-You can also install the current version as an [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0Y000000qpC3).
+You can also install the current version as an [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t0Y000000qkmP).
 
 # Getting started
 
