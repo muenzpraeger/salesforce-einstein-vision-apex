@@ -9,20 +9,11 @@ public class EinsteinVision_HttpBodyPartPrediction extends EinsteinVision_HttpBo
     private String modelId;
     private String data;
     private String sampleId;
-    private String fileName;
     private Types type;
     
     public EinsteinVision_HttpBodyPartPrediction(String modelId, String data, String sampleId, Types type) {
         this.modelId = modelId;
         this.data = data;
-        this.sampleId = sampleId;
-        this.type = type;
-    }
-    
-    public EinsteinVision_HttpBodyPartPrediction(String modelId, String data, String fileName, String sampleId, Types type) {
-        this.modelId = modelId;
-        this.data = data;
-        this.fileName = fileName;
         this.sampleId = sampleId;
         this.type = type;
     }
@@ -60,14 +51,6 @@ public class EinsteinVision_HttpBodyPartPrediction extends EinsteinVision_HttpBo
 
     public void setData(String data) {
         this.data = data;
-    }
-    
-    public String getFileName() {
-        return fileName;
-    }
-    
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public String getSampleId() {

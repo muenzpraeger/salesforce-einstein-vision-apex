@@ -1,14 +1,15 @@
 public class EinsteinVision_PredictionService {
 
     // Base URL for the PredictionService
-    private static String BASE_URL = 'https://api.metamind.io/v1/vision';
+    private static String BASE_URL = 'https://api.metamind.io/v1';
 
-    private String DATASETS = BASE_URL + '/datasets';
+    private String DATASETS = BASE_URL + '/vision/datasets';
     private String LABELS = '/labels';
     private String EXAMPLES = '/examples';
-    private String TRAIN = BASE_URL + '/train';
+    private String TRAIN = BASE_URL + '/vision/train';
     private String MODELS = '/models';
-    private String PREDICT = BASE_URL + '/predict';
+    private String PREDICT = BASE_URL + '/vision/predict';
+    private String API_USAGE = BASE_URL + '/apiusage';
 
     private boolean isExecuting = false;
     private String bearerToken = '';
@@ -50,6 +51,66 @@ public class EinsteinVision_PredictionService {
         } else {
             EinsteinVision_Dataset dataset = (EinsteinVision_Dataset)client.getParser().readValueAs(EinsteinVision_Dataset.class);
             System.debug('New Dataset with id ' + dataset.id + ' has been created.');
+            return dataset;
+        }
+        return null;
+    }
+    
+    /**
+     * Creates a new dataset with images from a remote zip file (async call).
+     * @param datasetId
+     * The id of the EinsteinVision_Dataset to which the image should be added.
+     * @param url
+     * The remote URL of the to be trained image.
+     * @return
+     * @
+     */
+    public EinsteinVision_Dataset createDatasetFromUrlAsync(Long datasetId, String url) {
+        System.debug('Starting createDatasetFromUrlAsync call from URL ' + url);
+        EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
+        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/upload', parts.build());
+        client.isPost(true);
+        System.debug('Target URL is ' + client.getUrl());
+        client.execute();
+        while(isExecuting()) {
+            System.debug('Status is: ' + isExecuting());
+        }
+        System.debug('Call createDatasetFromUrlAsync has been executed.');
+        if (client.isError()) {
+            handleError(client.getResponseError());
+        } else {
+            EinsteinVision_Dataset dataset = (EinsteinVision_Dataset)client.getParser().readValueAs(EinsteinVision_Dataset.class);
+            System.debug('New dataset with id ' + dataset.id + ' has been created.');
+            return dataset;
+        }
+        return null;
+    }
+    
+    /**
+     * Creates a new dataset with images from a remote zip file (sync).
+     * @param datasetId
+     * The id of the EinsteinVision_Dataset to which the image should be added.
+     * @param url
+     * The remote URL of the to be trained image.
+     * @return
+     * @
+     */
+    public EinsteinVision_Dataset createDatasetFromUrlSync(Long datasetId, String url) {
+        System.debug('Starting createDatasetFromUrlSync call from URL ' + url);
+        EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
+        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/upload/sync', parts.build());
+        client.isPost(true);
+        System.debug('Target URL is ' + client.getUrl());
+        client.execute();
+        while(isExecuting()) {
+            System.debug('Status is: ' + isExecuting());
+        }
+        System.debug('Call createDatasetFromUrlSync has been executed.');
+        if (client.isError()) {
+            handleError(client.getResponseError());
+        } else {
+            EinsteinVision_Dataset dataset = (EinsteinVision_Dataset)client.getParser().readValueAs(EinsteinVision_Dataset.class);
+            System.debug('New dataset with id ' + dataset.id + ' has been created.');
             return dataset;
         }
         return null;
@@ -223,7 +284,7 @@ public class EinsteinVision_PredictionService {
         while(isExecuting()) {
             System.debug('Status is: ' + isExecuting());
         }
-        System.debug('Call createExampleFromUrl has been executed.');
+        System.debug('Call createExample from blob has been executed.');
         if (client.isError()) {
             handleError(client.getResponseError());
         } else {
@@ -235,7 +296,7 @@ public class EinsteinVision_PredictionService {
     }
 
     /**
-     * Adds new image examples for the predictive vision training.
+     * Adds new image examples for the predictive vision training via a remote zip file.
      * @param datasetId
      * The id of the EinsteinVision_Dataset to which the image should be added.
      * @param url
@@ -244,7 +305,7 @@ public class EinsteinVision_PredictionService {
      * @
      */
     public EinsteinVision_Dataset createExamplesFromUrl(Long datasetId, String url) {
-        System.debug('Starting createExampleFromUrl call from URL ' + url);
+        System.debug('Starting createExamplesFromUrl call from URL ' + url);
         EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/' + datasetId + '/upload', parts.build());
         client.isPut(true);
@@ -258,7 +319,7 @@ public class EinsteinVision_PredictionService {
             handleError(client.getResponseError());
         } else {
             EinsteinVision_Dataset dataset = (EinsteinVision_Dataset)client.getParser().readValueAs(EinsteinVision_Dataset.class);
-            System.debug('New dataset with id ' + dataset.id + ' has been created.');
+            System.debug('New examples for dataset with id ' + dataset.id + ' have been created.');
             return dataset;
         }
         return null;
@@ -673,6 +734,30 @@ public class EinsteinVision_PredictionService {
             EinsteinVision_PredictionResult predictions = (EinsteinVision_PredictionResult)client.getParser().readValueAs(EinsteinVision_PredictionResult.class);
             System.debug('Image has been predicted.');
             return predictions;
+        }
+        return null;
+    }
+    
+   /**
+     * Fetches data about the API usage of the authenticated PredictionService.
+     * @return
+     * An array of all EinsteinVision_ApiUsage elements.
+     */
+    public EinsteinVision_ApiUsage[] getApiUsage() {
+        System.debug('Starting getApiUsage call');
+        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, API_USAGE);
+        System.debug('Target URL is ' + client.getUrl());
+        client.execute();
+        while (isExecuting()) {
+            System.debug('Status is: ' + isExecuting() );
+        }
+        System.debug('Call getApiUsage has been executed.');
+        if (client.isError()) {
+            handleError(client.getResponseError());
+        } else {
+            EinsteinVision_ApiUsage[] apiUsage = (EinsteinVision_ApiUsage[])client.getParser().readValueAs(EinsteinVision_ApiUsage[].class);
+            System.debug('API usage has been fetched.');
+            return apiUsage;
         }
         return null;
     }
