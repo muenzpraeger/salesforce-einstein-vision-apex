@@ -55,8 +55,8 @@ public class EinsteinVision_HttpBodyPartTraining extends EinsteinVision_HttpBody
         }
         body += WriteBoundary();
         body += WriteBodyParameter('learningRate', String.valueOf(learningRate));
-        body += WriteBoundary();
-        if (trainParams!=null) {
+        if (trainParams!=null && !trainParams.equals('')) {
+	        body += WriteBoundary();
             body += WriteBodyParameter('trainParams', trainParams);
         }
         body += WriteBoundary(EndingType.CrLf);

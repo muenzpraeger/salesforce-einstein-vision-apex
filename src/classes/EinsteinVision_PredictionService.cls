@@ -7,7 +7,7 @@ public class EinsteinVision_PredictionService {
     private String LABELS = '/labels';
     private String EXAMPLES = '/examples';
     private String TRAIN = BASE_URL + '/vision/train';
-    private String MODELS = '/models';
+    private String MODELS = '/vision/models';
     private String PREDICT = BASE_URL + '/vision/predict';
     private String API_USAGE = BASE_URL + '/apiusage';
 
@@ -58,14 +58,12 @@ public class EinsteinVision_PredictionService {
     
     /**
      * Creates a new dataset with images from a remote zip file (async call).
-     * @param datasetId
-     * The id of the EinsteinVision_Dataset to which the image should be added.
      * @param url
      * The remote URL of the to be trained image.
      * @return
      * @
      */
-    public EinsteinVision_Dataset createDatasetFromUrlAsync(Long datasetId, String url) {
+    public EinsteinVision_Dataset createDatasetFromUrlAsync(String url) {
         System.debug('Starting createDatasetFromUrlAsync call from URL ' + url);
         EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/upload', parts.build());
@@ -88,14 +86,12 @@ public class EinsteinVision_PredictionService {
     
     /**
      * Creates a new dataset with images from a remote zip file (sync).
-     * @param datasetId
-     * The id of the EinsteinVision_Dataset to which the image should be added.
      * @param url
      * The remote URL of the to be trained image.
      * @return
      * @
      */
-    public EinsteinVision_Dataset createDatasetFromUrlSync(Long datasetId, String url) {
+    public EinsteinVision_Dataset createDatasetFromUrlSync(String url) {
         System.debug('Starting createDatasetFromUrlSync call from URL ' + url);
         EinsteinVision_HttpBodyPartDatasetUrl parts = new EinsteinVision_HttpBodyPartDatasetUrl(url);
         EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/upload/sync', parts.build());
@@ -582,7 +578,7 @@ public class EinsteinVision_PredictionService {
      */
     public EinsteinVision_Model[] getModels(Long datasetId) {
         System.debug('Starting getModels call');
-        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/' + datasetId + MODELS);
+        EinsteinVision_HttpClient client = new EinsteinVision_HttpClient(this, DATASETS + '/' + datasetId + '/models');
         System.debug('Target URL is ' + client.getUrl());
         client.execute();
         while (isExecuting()) {
