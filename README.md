@@ -1,3 +1,5 @@
+# This repository is deprecated. Please checkout the new wrapper for [Salesfore Einstein Platform API](https://github.com/muenzpraeger/salesforce-einstein-platform-apex) that includes image, sentiment and intent prediction.
+
 # salesforce-einstein-vision-apex
 
 This repository showcases how to use the [Salesforce Einstein Vision API](https://metamind.readme.io/) using an Apex based wrapper.
